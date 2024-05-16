@@ -1,0 +1,31 @@
+name: Frutter CI/CD
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Setup Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+
+    - name: Install dependencies
+      run: pip install -r requirements.txt
+
+    - name: Run unit tests
+      run: pytest tests/
+
+    - name: Merge develop into current branch
+      run: git merge develop --no-commit --no-ff || echo "Conflict occurred"
+
+    - name: Check for merge conflicts
+      run: git diff --quiet && echo "No conflicts" || (echo "Conflicts found"; exit 1)
