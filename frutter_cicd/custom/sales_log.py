@@ -1,3 +1,5 @@
+import frappe
+
 @frappe.whitelist()
 def process_sale_log(name, customer, fsl_dist, posting_date, posting_time, is_return, item_code, item_name, fsl_pack, qty, uom, amount, fsl_ptr, rate, batch_no, fsl_exp_date,fsl_pts, is_free=None, fsl_reason=None, return_against=None, fsl_credit_note=None, reason_for_issuing_document=None, claim_id=None, sample_id=None):
     # Create a new Elbrit Sales Log document
