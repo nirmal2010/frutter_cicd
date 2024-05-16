@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import patch
 import frappe
-import sales_log
+from frutter_cicd.frutter_cicd.custom import sales_log
 
 class TestSalesLog(unittest.TestCase):
     @patch('frappe.new_doc')
