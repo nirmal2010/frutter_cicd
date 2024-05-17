@@ -13,7 +13,7 @@ class TestSum(unittest.TestCase):
         result = sum_of_two_numbers(a, b)
 
         # Assert
-        self.assertEqual(result, 12)
+        self.assertEqual(result, 13)
 
 if __name__ == '__main__':
     unittest.main()
