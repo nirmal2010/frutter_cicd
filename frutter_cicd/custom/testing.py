@@ -1,4 +1,4 @@
-import ffrappe
+import frappe
 
 def test():
     print("Hello World")
