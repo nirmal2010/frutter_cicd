@@ -147,6 +147,7 @@ def process_sale_log(name, customer, fsl_dist, posting_date, posting_time, is_re
                 notification.subject = (f"{item_code} is missing in Item Sales Team Mapping for the Sales Team linked to {hq_doc.name}")
                 notification.type = "Alert"
                 notification.insert(ignore_permissions=True)
+              frappe.db.commit()
                 
 
     el_log.insert()
