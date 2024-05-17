@@ -29,7 +29,7 @@ jobs:
       
     - name: Run unit tests in frutter_cicd/doctype directory
       run: |
-        find frutter_cicd/doctype -name 'test_*.py' -exec pytest {} \;
+        find frutter_cicd/frutter_cicd/doctype/ -name 'test_*.py' -exec pytest {} \;
         
     - name: Merge develop into current branch
       run: git merge develop --no-commit --no-ff || echo "Conflict occurred"
