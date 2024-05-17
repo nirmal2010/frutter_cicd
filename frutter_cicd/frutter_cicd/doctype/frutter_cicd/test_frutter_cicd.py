@@ -2,7 +2,7 @@
 # See license.txt
 
 import frappe
-from frappe.tests.utils import FrappeTestCase
+# from frappe.tests.utils import FrappeTestCase
 from frutter_cicd.doctype.frutter_cicd.frutter_cicd import FrutterCICD
 
 
