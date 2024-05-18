@@ -36,6 +36,23 @@ jobs:
         pip install -e bench
         bench init frappe-bench --frappe-branch develop
 
+    - name: Create Frappe site
+      run: |
+        cd frappe-bench
+        bench new-site <site_name>
+
+    - name: Get repository name
+      id: get_repo_name
+      run: |
+        echo $GITHUB_REPOSITORY | cut -d'/' -f2
+
+    - name: Download and install repository into apps folder
+      run: |
+        cd frappe-bench/apps
+        git clone https://github.com/${{ github.repository }}
+        cd ${{ steps.get_repo_name.outputs.stdout }}
+        bench --site <site_name> install-app .
+
     - name: Run unit tests
       run: |
         pytest tests/
