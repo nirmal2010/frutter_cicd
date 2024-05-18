@@ -152,3 +152,4 @@ def process_sale_log(name, customer, fsl_dist, posting_date, posting_time, is_re
 
     el_log.insert()
     frappe.db.commit()
+    
