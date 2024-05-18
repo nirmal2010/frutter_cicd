@@ -26,6 +26,11 @@ jobs:
         pip install pytest
         pip install frappe
 
+    - name: Install Redis
+      run: |
+        sudo apt update
+        sudo apt install redis-server
+
     - name: Install Frappe Bench
       run: |
         git clone https://github.com/frappe/bench.git
@@ -36,11 +41,6 @@ jobs:
       run: |
         pytest tests/
         find frutter_cicd/frutter_cicd/doctype/ -name 'test_*.py' -exec pytest {} \;
-
-    - name: Install Redis
-      run: |
-        sudo apt update
-        sudo apt install redis-server
 
     - name: Check for test cases
       run: |
