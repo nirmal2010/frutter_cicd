@@ -30,6 +30,7 @@ jobs:
       run: |
         git clone https://github.com/frappe/bench.git
         pip install -e bench
+        bench init frappe-bench --frappe-branch develop
 
     - name: Run unit tests
       run: |
