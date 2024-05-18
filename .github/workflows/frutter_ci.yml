@@ -12,6 +12,8 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
+      with:
+        fetch-depth: 0  # Fetch the full history
 
     - name: Setup Python
       uses: actions/setup-python@v2
@@ -36,15 +38,14 @@ jobs:
 
     - name: Check for test cases
       run: |
-        # file_name=$(basename $GITHUB_WORKSPACE/$GITHUB_EVENT_NAME)
         # Get the names of the files that were changed in the last commit
         changed_files=$(git diff --name-only HEAD^ HEAD)
-
+      
         # Loop over each changed file
         for file_name in $changed_files; do
           # Remove the .py extension and add _test.py to get the test file name
           test_file="${file_name//.py/_test.py}"
-
+      
           # Check if the test file exists in either the tests/ directory or the frutter_cicd/frutter_cicd/doctype/ directory
           if [[ -f "tests/$test_file" || -f "frutter_cicd/frutter_cicd/doctype/$test_file" ]]; then
             echo "Test file $test_file found."
