@@ -9,4 +9,3 @@ class FrutterCICD(Document):
 	pass
 
 
-

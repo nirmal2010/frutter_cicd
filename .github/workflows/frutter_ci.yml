@@ -40,12 +40,13 @@ jobs:
       run: |
         # Get the names of the files that were changed in the last commit
         changed_files=$(git diff --name-only HEAD^ HEAD)
-      
+          
         # Loop over each changed file
         for file_name in $changed_files; do
-          # Remove the .py extension and add _test.py to get the test file name
-          test_file="${file_name//.py/_test.py}"
-      
+          # Remove the .py extension and add test_.py to get the test file name
+          base_name=$(basename $file_name .py)
+          test_file="test_${base_name}.py"
+          
           # Check if the test file exists in either the tests/ directory or the frutter_cicd/frutter_cicd/doctype/ directory
           if [[ -f "tests/$test_file" || -f "frutter_cicd/frutter_cicd/doctype/$test_file" ]]; then
             echo "Test file $test_file found."
