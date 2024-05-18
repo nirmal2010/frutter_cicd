@@ -47,13 +47,22 @@ jobs:
           base_name=$(basename $file_name .py)
           test_file="test_${base_name}.py"
           
-          # Check if the test file exists in either the tests/ directory or the frutter_cicd/frutter_cicd/doctype/ directory
-          if [[ -f "tests/$test_file" || -f "frutter_cicd/frutter_cicd/doctype/$test_file" ]]; then
-            echo "Test file $test_file found."
-            pytest "tests/$test_file" "frutter_cicd/frutter_cicd/doctype/$test_file"
+          # Check if the test file exists in the tests/ directory
+          if [[ -f "tests/$test_file" ]]; then
+            echo "Test file $test_file found in tests/ directory."
+            pytest "tests/$test_file"
           else
-            echo "Test file $test_file not found."
-            exit 1
+            # Check if the test file exists in the frutter_cicd/frutter_cicd/doctype/ directory or its subdirectories
+            found_files=$(find frutter_cicd/frutter_cicd/doctype/ -name $test_file)
+            if [[ -n $found_files ]]; then
+              echo "Test file $test_file found in frutter_cicd/frutter_cicd/doctype/ directory or its subdirectories."
+              for found_file in $found_files; do
+                pytest $found_file
+              done
+            else
+              echo "Test file $test_file not found."
+              exit 1
+            fi
           fi
         done
 
