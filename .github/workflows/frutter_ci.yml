@@ -39,7 +39,7 @@ jobs:
     - name: Create Frappe site
       run: |
         cd frappe-bench
-        bench new-site dev.frutter.com
+        echo "Frappe" |bench new-site dev.frutter.com
     - name: Get repository name
       id: get_repo_name
       run: |
