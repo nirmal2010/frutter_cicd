@@ -39,8 +39,7 @@ jobs:
     - name: Create Frappe site
       run: |
         cd frappe-bench
-        bench new-site <site_name>
-
+        bench new-site dev.frutter.com
     - name: Get repository name
       id: get_repo_name
       run: |
@@ -51,7 +50,7 @@ jobs:
         cd frappe-bench/apps
         git clone https://github.com/${{ github.repository }}
         cd ${{ steps.get_repo_name.outputs.stdout }}
-        bench --site <site_name> install-app .
+        bench --site dev.frutter.com install-app .
 
     - name: Run unit tests
       run: |
