@@ -25,12 +25,22 @@ jobs:
         pip install frappe
 
     - name: Run unit tests
-      run: pytest tests/
-      
-    - name: Run unit tests in frutter_cicd/doctype directory
       run: |
+        pytest tests/
         find frutter_cicd/frutter_cicd/doctype/ -name 'test_*.py' -exec pytest {} \;
-        
+
+    - name: Check for test cases
+      run: |
+        file_name=$(basename $GITHUB_WORKSPACE/$GITHUB_EVENT_PATH)
+        test_file="${file_name//.py/_test.py}"
+        if [[ -f "tests/$test_file" || -f "frutter_cicd/frutter_cicd/doctype/$test_file" ]]; then
+          echo "Test file $test_file found."
+          pytest "tests/$test_file" "frutter_cicd/frutter_cicd/doctype/$test_file"
+        else
+          echo "Test file $test_file not found."
+          exit 1
+        fi
+
     - name: Merge develop into current branch
       run: git merge develop --no-commit --no-ff || echo "Conflict occurred"
 
