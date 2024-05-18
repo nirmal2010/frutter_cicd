@@ -36,14 +36,20 @@ jobs:
         pip install -e bench
         bench init frappe-bench --frappe-branch develop
 
+    - name: Restart MySQL service
+      run: sudo service mysql restart
+
     - name: Create Frappe site
       run: |
         cd frappe-bench
         echo "Frappe" |bench new-site dev.frutter.com
+        bench set-config developer_mode 1
+
     - name: Get repository name
       id: get_repo_name
       run: |
         echo $GITHUB_REPOSITORY | cut -d'/' -f2
+    
 
     - name: Download and install repository into apps folder
       run: |
