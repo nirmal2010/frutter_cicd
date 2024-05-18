@@ -23,7 +23,11 @@ jobs:
         python -m pip install --upgrade pip
         pip install pytest
         pip install frappe
-        pip install frappe-bench
+
+    - name: Install Frappe Bench
+      run: |
+        git clone https://github.com/frappe/bench.git
+        pip install -e bench
 
     - name: Run unit tests
       run: |
