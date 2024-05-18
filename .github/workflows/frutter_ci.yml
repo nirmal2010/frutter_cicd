@@ -31,7 +31,7 @@ jobs:
 
     - name: Check for test cases
       run: |
-        file_name=$(basename $GITHUB_WORKSPACE/$GITHUB_EVENT_PATH)
+        file_name=$(basename $GITHUB_WORKSPACE/$GITHUB_EVENT_NAME)
         test_file="${file_name//.py/_test.py}"
         if [[ -f "tests/$test_file" || -f "frutter_cicd/frutter_cicd/doctype/$test_file" ]]; then
           echo "Test file $test_file found."
