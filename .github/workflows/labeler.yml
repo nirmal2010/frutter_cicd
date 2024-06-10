@@ -79,3 +79,5 @@ jobs:
 
     - name: Check for merge conflicts
       run: git diff --quiet && echo "No conflicts" || (echo "Conflicts found"; exit 1)
+
+      
