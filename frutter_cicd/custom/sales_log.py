@@ -128,7 +128,7 @@ def process_sale_log(name, customer, fsl_dist, posting_date, posting_time, is_re
                     })
                     amount = float(amount)
                     # employee = frappe.get_doc("Employee", e_name)
-                    # el_log.fsl_reportees = []
+                    el_log.fsl_reportees = []
 
                     # for reportee in employee.fsl_employee_reportees:
                     #     if reportee.designation == "Area Business Manager":
@@ -152,3 +152,4 @@ def process_sale_log(name, customer, fsl_dist, posting_date, posting_time, is_re
 
     el_log.insert()
     frappe.db.commit()
+    
