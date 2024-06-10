@@ -22,3 +22,4 @@ class TestFrutterCICD(FrappeTestCase):
 
 		# Assert that the title of the retrieved document matches the original title
 		self.assertEqual(retrieved_frutter_cicd.title, "Test Document")
+		
