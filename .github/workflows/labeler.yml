@@ -1,22 +1,83 @@
-# This workflow will triage pull requests and apply a label based on the
-# paths that are modified in the pull request.
-#
-# To use this workflow, you will need to set up a .github/labeler.yml
-# file with configuration.  For more information, see:
-# https://github.com/actions/labeler
+name: Frutter Docker
 
-name: Labeler
-on: [pull_request_target]
+on:
+  push:
+    branches:
+      - develop
 
 jobs:
-  label:
-
+  build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      pull-requests: write
+
+    services:
+      mariadb:
+        image: mariadb:latest
+        env:
+          MYSQL_ROOT_PASSWORD: root
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
 
     steps:
-    - uses: actions/labeler@v4
+    - name: Checkout repository
+      uses: actions/checkout@v2
       with:
-        repo-token: "${{ secrets.GITHUB_TOKEN }}"
+        fetch-depth: 0  # Fetch the full history
+
+    - name: Setup Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.10'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pytest
+
+    - name: Install Redis
+      run: |
+        sudo apt update
+        sudo apt install redis-server
+
+    - name: Install Frappe Bench
+      run: |
+        git clone https://github.com/frappe/bench.git
+        pip install -e bench
+        bench init frappe-bench --frappe-branch develop
+
+    - name: Run unit tests
+      run: |
+        pytest tests/
+        find frutter_cicd/frutter_cicd/doctype/ -name 'test_*.py' -exec pytest {} \;
+
+    - name: Check for test cases
+      run: |
+        # Get the names of the files that were changed in the last commit
+        changed_files=$(git diff --name-only HEAD^ HEAD)
+          
+        # Loop over each changed file
+        for file_name in $changed_files; do
+          # Check if the file is a Python file
+          if [[ $file_name == *.py ]]; then
+            # Remove the .py extension and add test_.py to get the test file name
+            base_name=$(basename $file_name .py)
+            test_file="test_${base_name}.py"
+            
+            # Check if the test file exists anywhere in the repository
+            found_files=$(find . -name $test_file)
+            if [[ -n $found_files ]]; then
+              echo "Test file $test_file found."
+            else
+              echo "Test file $test_file not found."
+              exit 1
+            fi
+          fi
+        done
+
+    - name: Merge develop into current branch
+      run: git merge develop --no-commit --no-ff || echo "Conflict occurred"
+
+    - name: Check for merge conflicts
+      run: git diff --quiet && echo "No conflicts" || (echo "Conflicts found"; exit 1)
+
+      
