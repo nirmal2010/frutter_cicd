@@ -5,6 +5,7 @@ on:
     branches:
       - develop
   pull_request:
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -16,7 +17,7 @@ jobs:
           MYSQL_ROOT_PASSWORD: root
         ports:
           - 3306:3306
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=60s --health-retries=5  # Increased timeout and retries
 
     steps:
     - name: Checkout repository
@@ -37,7 +38,7 @@ jobs:
     - name: Install Redis
       run: |
         sudo apt update
-        sudo apt install redis-server
+        sudo apt install -y redis-server  # Added -y flag to automatically confirm installation
 
     - name: Install Frappe Bench
       run: |
@@ -75,7 +76,9 @@ jobs:
         done
 
     - name: Merge develop into current branch
-      run: git merge develop --no-commit --no-ff || echo "Conflict occurred"
+      run: |
+        git fetch origin
+        git merge origin/develop --no-commit --no-ff || echo "Conflict occurred"
 
     - name: Check for merge conflicts
       run: git diff --quiet && echo "No conflicts" || (echo "Conflicts found"; exit 1)
