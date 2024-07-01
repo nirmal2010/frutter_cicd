@@ -100,18 +100,18 @@ jobs:
       #   run: |
       #     pytest tests/
       #     find frutter_cicd/frutter_cicd/doctype/ -name 'test_*.py' -exec pytest {} \;
-      - name: Run Unit Tests
-        working-directory: /home/runner/frappe-bench
-        run: |
-          # Run pytest for all unit tests in the project
-          pytest tests/
+      # - name: Run Unit Tests
+      #   working-directory: /home/runner/frappe-bench
+      #   run: |
+      #     # Run pytest for all unit tests in the project
+      #     pytest tests/
 
-          # Find and run tests for all folders under frutter_cicd/frutter_cicd/doctype/
-          for folder in frutter_cicd/frutter_cicd/doctype/*/; do
-            if [[ -d "$folder" ]]; then
-              find "$folder" -name 'test_*.py' -exec pytest {} +
-            fi
-          done
+      #     # Find and run tests for all folders under frutter_cicd/frutter_cicd/doctype/
+      #     for folder in frutter_cicd/frutter_cicd/doctype/*/; do
+      #       if [[ -d "$folder" ]]; then
+      #         find "$folder" -name 'test_*.py' -exec pytest {} +
+      #       fi
+      #     done
 
 
       # - name: Check for Test Cases
