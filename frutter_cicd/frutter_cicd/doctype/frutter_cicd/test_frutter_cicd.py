@@ -4,7 +4,7 @@
 import unittest
 from unittest.mock import patch
 import frappe
-from frutter_cicd.frutter_cicd.frutter_cicd.doctype.frutter_cicd.frutter_cicd import process_sale_log
+from frutter_cicd.frutter_cicd.doctype.frutter_cicd.frutter_cicd import process_sale_log
 
 class TestProcessSaleLog(unittest.TestCase):
     @patch('frappe.new_doc')
@@ -26,27 +26,10 @@ class TestProcessSaleLog(unittest.TestCase):
         # Assert that the new_doc function was called with the correct argument
         mock_new_doc.assert_called_with("Elbrit Sales Log")
 
-        # Add more assertions here based on what you expect the function to do
-
-if __name__ == '__main__':
-    unittest.main()
-
-
-
-def sum_of_two_numberss(a, b):
-    return a + b
-
-class TestSums(unittest.TestCase):
-    def test_sum_of_two_numbers(self):
-        # Arrange
-        a = 5
-        b = 9
-
-        # Act
-        result = sum_of_two_numberss(a, b)
-
-        # Assert
-        self.assertEqual(result, 17)
+        # Add an assertion for the title of retrieved_frutter_cicd
+        # Assuming retrieved_frutter_cicd is an instance of a document retrieved by some function in your code
+        # Replace it with the actual object that you want to test
+        # self.assertEqual(retrieved_frutter_cicd.title, "Test Document")
 
 if __name__ == '__main__':
     unittest.main()
