@@ -95,11 +95,6 @@ jobs:
         env:
           CI: 'Yes'
 
-      # - name: Run Unit Tests
-      #   working-directory: /home/runner/frappe-bench
-      #   run: |
-      #     pytest tests/
-      #     find frutter_cicd/frutter_cicd/doctype/ -name 'test_*.py' -exec pytest {} \;
       - name: Run Unit Tests
         working-directory: /home/runner/frappe-bench
         run: |
@@ -114,25 +109,6 @@ jobs:
           done
 
 
-      # - name: Check for Test Cases
-      #   working-directory: /home/runner/frappe-bench
-      #   run: |
-      #     changed_files=$(git diff --name-only HEAD^ HEAD)
-      #     for file_name in $changed_files; do
-      #       if [[ $file_name == *.py ]]; then
-      #         base_name=$(basename $file_name .py)
-      #         test_file="test_${base_name}.py"
-      #         found_files=$(find . -name $test_file)
-      #         if [[ -n $found_files ]]; then
-      #           echo "Test file $test_file found."
-      #         else
-      #           echo "Test file $test_file not found."
-      #           exit 1
-      #         fi
-      #       fi
-      #     done
-      #   env:
-      #     CI: 'Yes'
       - name: Check for Test Cases
         working-directory: /home/runner/frappe-bench
         run: |
@@ -140,17 +116,13 @@ jobs:
           for file_name in $changed_files; do
             if [[ $file_name == *.py ]]; then
               base_name=$(basename $file_name .py)
-              if [[ $base_name == test_* ]]; then
-                echo "Test file $base_name.py found."
+              test_file="test_${base_name}.py"
+              found_files=$(find . -name $test_file)
+              if [[ -n $found_files ]]; then
+                echo "Test file $test_file found."
               else
-                test_file="test_${base_name}.py"
-                found_files=$(find . -name $test_file)
-                if [[ -n $found_files ]]; then
-                  echo "Test file $test_file found."
-                else
-                  echo "Test file $test_file not found."
-                  exit 1
-                fi
+                echo "Test file $test_file not found."
+                exit 1
               fi
             fi
           done
