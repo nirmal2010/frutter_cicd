@@ -95,72 +95,37 @@ jobs:
         env:
           CI: 'Yes'
 
-      # - name: Run Unit Tests
-      #   working-directory: /home/runner/frappe-bench
-      #   run: |
-      #     pytest tests/
-      #     find frutter_cicd/frutter_cicd/doctype/ -name 'test_*.py' -exec pytest {} \;
-      # - name: Run Unit Tests
-      #   working-directory: /home/runner/frappe-bench
-      #   run: |
-      #     # Run pytest for all unit tests in the project
-      #     pytest tests/
-
-      #     # Find and run tests for all folders under frutter_cicd/frutter_cicd/doctype/
-      #     for folder in frutter_cicd/frutter_cicd/doctype/*/; do
-      #       if [[ -d "$folder" ]]; then
-      #         find "$folder" -name 'test_*.py' -exec pytest {} +
-      #       fi
-      #     done
-
-
-      # - name: Check for Test Cases
-      #   working-directory: /home/runner/frappe-bench
-      #   run: |
-      #     changed_files=$(git diff --name-only HEAD^ HEAD)
-      #     for file_name in $changed_files; do
-      #       if [[ $file_name == *.py ]]; then
-      #         base_name=$(basename $file_name .py)
-      #         test_file="test_${base_name}.py"
-      #         found_files=$(find . -name $test_file)
-      #         if [[ -n $found_files ]]; then
-      #           echo "Test file $test_file found."
-      #         else
-      #           echo "Test file $test_file not found."
-      #           exit 1
-      #         fi
-      #       fi
-      #     done
-      #   env:
-      #     CI: 'Yes'
-      - name: Check Python files and run tests
+      - name: Run Unit Tests
+        working-directory: /home/runner/frappe-bench
         run: |
-          # Get list of changed files in this push
-          changed_files=$(git diff --name-only HEAD^ HEAD)
+          # Run pytest for all unit tests in the project
+          pytest tests/
 
+          # Find and run tests for all folders under frutter_cicd/frutter_cicd/doctype/
+          for folder in frutter_cicd/frutter_cicd/doctype/*/; do
+            if [[ -d "$folder" ]]; then
+              find "$folder" -name 'test_*.py' -exec pytest {} +
+            fi
+          done
+
+
+      - name: Check for Test Cases
+        working-directory: /home/runner/frappe-bench
+        run: |
+          changed_files=$(git diff --name-only HEAD^ HEAD)
           for file_name in $changed_files; do
-            # Check if the file is a Python file and doesn't start with 'test_'
-            if [[ $file_name == *.py && ! $(basename $file_name) =~ ^test_ ]]; then
+            if [[ $file_name == *.py ]]; then
               base_name=$(basename $file_name .py)
               test_file="test_${base_name}.py"
-              
-              # Check if a corresponding test file exists
-              if [ -f $test_file ]; then
+              found_files=$(find . -name $test_file)
+              if [[ -n $found_files ]]; then
                 echo "Test file $test_file found."
-                # Run pytest on the test file
-                pytest $test_file
-                # Check the result of the pytest run
-                if [ $? -eq 0 ]; then
-                  echo "Tests passed for $test_file"
-                else
-                  echo "Tests failed for $test_file"
-                  exit 1
-                fi
               else
                 echo "Test file $test_file not found."
                 exit 1
               fi
             fi
           done
+        env:
           CI: 'Yes'
 
