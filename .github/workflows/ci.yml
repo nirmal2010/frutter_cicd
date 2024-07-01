@@ -133,27 +133,34 @@ jobs:
       #     done
       #   env:
       #     CI: 'Yes'
-      - name: Check for Test Cases
-        working-directory: /home/runner/frappe-bench
+      - name: Check Python files and run tests
         run: |
+          # Get list of changed files in this push
           changed_files=$(git diff --name-only HEAD^ HEAD)
+
           for file_name in $changed_files; do
-            if [[ $file_name == *.py ]]; then
+            # Check if the file is a Python file and doesn't start with 'test_'
+            if [[ $file_name == *.py && ! $(basename $file_name) =~ ^test_ ]]; then
               base_name=$(basename $file_name .py)
-              if [[ $base_name == test_* ]]; then
-                echo "Test file $base_name.py found."
-              else
-                test_file="test_${base_name}.py"
-                found_files=$(find . -name $test_file)
-                if [[ -n $found_files ]]; then
-                  echo "Test file $test_file found."
+              test_file="test_${base_name}.py"
+              
+              # Check if a corresponding test file exists
+              if [ -f $test_file ]; then
+                echo "Test file $test_file found."
+                # Run pytest on the test file
+                pytest $test_file
+                # Check the result of the pytest run
+                if [ $? -eq 0 ]; then
+                  echo "Tests passed for $test_file"
                 else
-                  echo "Test file $test_file not found."
+                  echo "Tests failed for $test_file"
                   exit 1
                 fi
+              else
+                echo "Test file $test_file not found."
+                exit 1
               fi
             fi
           done
-        env:
           CI: 'Yes'
 
