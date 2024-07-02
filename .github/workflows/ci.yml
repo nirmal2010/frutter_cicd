@@ -99,7 +99,7 @@ jobs:
         working-directory: /home/runner/frappe-bench
         run: |
           # Run pytest for all unit tests in the project
-          pytest tests/
+          pytest frutter_cicd/tests/
 
           # Find and run tests for all folders under frutter_cicd/frutter_cicd/doctype/
           for folder in frutter_cicd/frutter_cicd/doctype/*/; do
