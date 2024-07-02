@@ -95,23 +95,26 @@ jobs:
         env:
           CI: 'Yes'
       
-      - name: List Test Files
-        run: |
-          ls -la frutter_cicd/tests/
-        
+      # - name: List Test Files
+      #   run: |
+      #     ls -la frutter_cicd/tests/
+      #     ls -la ./tests/
+      #     ls -la ../tests/
 
-      - name: Run Unit Tests
-        working-directory: /home/runner/frappe-bench
-        run: |
-          # Run pytest for all unit tests in the project
-          pytest frutter_cicd/tests/
+      # - name: Run Unit Tests
+      #   working-directory: /home/runner/frappe-bench
+      #   run: |
+      #     # Run pytest for all unit tests in the project
+      #     pytest frutter_cicd/tests/
 
-          # Find and run tests for all folders under frutter_cicd/frutter_cicd/doctype/
-          for folder in frutter_cicd/frutter_cicd/doctype/*/; do
-            if [[ -d "$folder" ]]; then
-              find "$folder" -name 'test_*.py' -exec pytest {} +
-            fi
-          done
+      #     # Find and run tests for all folders under frutter_cicd/frutter_cicd/doctype/
+      #     for folder in frutter_cicd/frutter_cicd/doctype/*/; do
+      #       if [[ -d "$folder" ]]; then
+      #         find "$folder" -name 'test_*.py' -exec pytest {} +
+      #       fi
+      #     done
+      - name: Run unit tests
+        run: pytest tests/
 
 
       - name: Check for Test Cases
