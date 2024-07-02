@@ -94,6 +94,11 @@ jobs:
           bench build
         env:
           CI: 'Yes'
+      
+      - name: List Test Files
+        run: |
+          ls -la frutter_cicd/tests/
+        
 
       - name: Run Unit Tests
         working-directory: /home/runner/frappe-bench
