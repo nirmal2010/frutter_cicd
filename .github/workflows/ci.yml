@@ -95,11 +95,11 @@ jobs:
         env:
           CI: 'Yes'
       
-      - name: List Test Files
-        run: |
-          ls -la frutter_cicd/tests/
-          ls -la ./tests/
-          ls -la ../tests/
+      # - name: List Test Files
+      #   run: |
+      #     ls -la frutter_cicd/tests/
+      #     ls -la ./tests/
+      #     ls -la ../tests/
 
       # - name: Run Unit Tests
       #   working-directory: /home/runner/frappe-bench
